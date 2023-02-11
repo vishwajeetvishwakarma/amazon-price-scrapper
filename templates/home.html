@@ -1,0 +1,81 @@
+{% extends '_base.html' %} {% load crispy_forms_tags %} {% block title %} Home
+{% endblock title %} {% block content %}
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Add Product To Track
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %} {{form|crispy}}
+          <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container p-4">
+  <div class="row">
+    <div class="col text-start">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        Add
+      </button>
+      <a class="link-light" href="{% url 'update' %}">
+        <button class="btn btn-primary">Refresh</button>
+      </a>
+    </div>
+    <div class="col text-end d-flex justify-content-end">
+      <h5 class="px-3">
+        Total Item : <span class="text-danger"> {{qs_count}}</span>
+      </h5>
+      <h5>Discounted : <span class="text-danger">{{discounted}}</span></h5>
+    </div>
+  </div>
+  <div class="mt-5">
+    {% if qs %} {% for i in qs %}
+    <div class="card my-3">
+      <div class="card-header d-flex justify-content-between">
+        <h5 class="card-title">Name : {{i.name}}</h5>
+        <a href="{% url 'delete-product' i.pk %}" class="link-danger px-2"
+          ><i class="fa-sharp fa-xl fa-solid fa-xmark"></i
+        ></a>
+      </div>
+      <div class="card-body">
+        <h6 class="">Url : <a href="{{i.url}}">{{i.url}}</a></h6>
+        <h6 class="">Current Price : ₹{{i.current_price}}</h6>
+        <h6 class="">Old Price : ₹{{i.old_price}}</h6>
+        <h6 class="">
+          Price Different : ₹ {% if i.price_diff > 0 %}
+          <span class="text-danger">{{i.price_diff}}</span>
+          {% else %}
+          <span class="text-success">{{i.price_diff}}</span>
+          {% endif %}
+        </h6>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <h3>You have not enter Any items.</h3>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}

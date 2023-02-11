@@ -1,0 +1,13 @@
+{% extends '_base.html' %} 
+{% load crispy_forms_tags %}
+{% block title %} Confirm Delete {% endblock title %} 
+{% block content %}
+
+<div class="container p-4">
+  <form  method="post">
+    {% csrf_token %}
+    <h3>Are You Sure, You wnat to delete  the link {{object.name}} .</h3>
+    <button class="btn btn-danger">Yes</button>
+  </form>
+</div>
+{% endblock content %}
